@@ -1,9 +1,9 @@
 
-## 📈 Progress Tracking
+# 📈 Progress Tracking
 
 Use these checklists to track your progress by level. Run `/self-assessment` anytime to get an updated skill profile, or `/lesson-quiz [lesson]` after each tutorial to verify your understanding.
 
-### 🟢 Level 1: Beginner
+## 🟢 Level 1: Beginner
 - [x] Completed [01-slash-commands](01-slash-commands/)
 - [ ] Completed [02-memory](02-memory/)
 - [ ] Created first custom slash command
@@ -15,7 +15,7 @@ Use these checklists to track your progress by level. Run `/self-assessment` any
 - [ ] Used interactive and print mode
 - [ ] **Milestone 1B achieved**
 
-### 🔵 Level 2: Intermediate
+## 🔵 Level 2: Intermediate
 - [ ] Completed [03-skills](03-skills/)
 - [ ] Completed [06-hooks](06-hooks/)
 - [ ] Installed first skill
@@ -28,7 +28,7 @@ Use these checklists to track your progress by level. Run `/self-assessment` any
 - [ ] Combined integrations in a workflow
 - [ ] **Milestone 2B achieved**
 
-### 🔴 Level 3: Advanced
+## 🔴 Level 3: Advanced
 - [ ] Completed [09-advanced-features](09-advanced-features/)
 - [ ] Used planning mode successfully
 - [ ] Configured permission modes (6 modes including auto)
@@ -43,3 +43,23 @@ Use these checklists to track your progress by level. Run `/self-assessment` any
 - [ ] Integrated Claude into CI/CD pipeline
 - [ ] Created team plugin
 - [ ] **Milestone 3B achieved**
+
+---
+
+# Slash commands
+
+- [x] /config
+- [x] /usage
+- [ ] /memory
+- [ ] /copy
+- [ ] /copy w (?)
+- [ ] /export [filename]
+- [ ] /context
+- [ ] /diff
+- [ ] /rewind
+- [ ] /recap
+- [ ] /continue
+- [ ] /ide
+- [ ] /chrome
+- [ ] /install-slack-app
+- [ ] /plan [description]
