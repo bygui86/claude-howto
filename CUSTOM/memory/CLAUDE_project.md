@@ -22,6 +22,7 @@
 - Use ESLint with airbnb config
 - Maximum line length: 100 characters
 - Use 2-space indentation
+- Prefer composition over inheritance
 
 ### Naming Conventions
 - **Files**: kebab-case (user-controller.js)
@@ -36,6 +37,8 @@
 - PR required before merge
 - All CI/CD checks must pass
 - Minimum 1 approval required
+- Always run tests before committing
+- Use semantic versioning for all releases
 
 ### Testing Requirements
 - Minimum 80% code coverage
