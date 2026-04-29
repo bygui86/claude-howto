@@ -40,8 +40,8 @@ cp 02-memory/project-CLAUDE.md ./CLAUDE.md
 
 #### Next Steps
 Once comfortable, read:
-- [01-slash-commands/README.md](01-slash-commands/README.md)
-- [02-memory/README.md](02-memory/README.md)
+- [01-slash-commands/README.md](../01-slash-commands/README.md)
+- [02-memory/README.md](../02-memory/README.md)
 
 > **Check your understanding**: Run `/lesson-quiz slash-commands` or `/lesson-quiz memory` in Claude Code to test what you've learned.
 
@@ -84,8 +84,8 @@ cat error.log | claude -p "explain this error"
 - [ ] Understand when to use checkpoints for safe experimentation
 
 #### Next Steps
-- Read: [08-checkpoints/README.md](08-checkpoints/README.md)
-- Read: [10-cli/README.md](10-cli/README.md)
-- **Ready for Level 2!** Proceed to [Milestone 2A](#milestone-2a-automation-skills--hooks)
+- Read: [08-checkpoints/README.md](../08-checkpoints/README.md)
+- Read: [10-cli/README.md](../10-cli/README.md)
+- **Ready for Level 2!** Proceed to [Milestone 2A](LEARNING-ROADMAP_LEVEL-2.md#milestone-2a-automation-skills--hooks)
 
 > **Check your understanding**: Run `/lesson-quiz checkpoints` or `/lesson-quiz cli` to verify you're ready for Level 2.

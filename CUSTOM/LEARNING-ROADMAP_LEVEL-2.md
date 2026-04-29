@@ -10,10 +10,10 @@
 
 Before starting Level 2, make sure you're comfortable with these Level 1 concepts:
 
-- [ ] Can create and use slash commands ([01-slash-commands/](01-slash-commands/))
-- [ ] Have set up project memory via CLAUDE.md ([02-memory/](02-memory/))
-- [ ] Know how to create and restore checkpoints ([08-checkpoints/](08-checkpoints/))
-- [ ] Can use `claude` and `claude -p` from the command line ([10-cli/](10-cli/))
+- [ ] Can create and use slash commands ([01-slash-commands/](../01-slash-commands/))
+- [ ] Have set up project memory via CLAUDE.md ([02-memory/](../02-memory/))
+- [ ] Know how to create and restore checkpoints ([08-checkpoints/](../08-checkpoints/))
+- [ ] Can use `claude` and `claude -p` from the command line ([10-cli/](../10-cli/))
 
 > **Gaps?** Review the linked tutorials above before continuing.
 
@@ -71,8 +71,8 @@ chmod +x ~/.claude/hooks/pre-tool-check.sh
 #### Next Steps
 - Create your own custom skill
 - Set up additional hooks for your workflow
-- Read: [03-skills/README.md](03-skills/README.md)
-- Read: [06-hooks/README.md](06-hooks/README.md)
+- Read: [03-skills/README.md](../03-skills/README.md)
+- Read: [06-hooks/README.md](../06-hooks/README.md)
 
 > **Check your understanding**: Run `/lesson-quiz skills` or `/lesson-quiz hooks` to test your knowledge before moving on.
 
@@ -121,8 +121,8 @@ Try this complete workflow:
 #### Next Steps
 - Set up additional MCP servers (database, Slack, etc.)
 - Create custom subagents for your domain
-- Read: [05-mcp/README.md](05-mcp/README.md)
-- Read: [04-subagents/README.md](04-subagents/README.md)
-- **Ready for Level 3!** Proceed to [Milestone 3A](#milestone-3a-advanced-features)
+- Read: [05-mcp/README.md](../05-mcp/README.md)
+- Read: [04-subagents/README.md](../04-subagents/README.md)
+- **Ready for Level 3!** Proceed to [Milestone 3A](LEARNING-ROADMAP_LEVEL-3.md#milestone-3a-advanced-features)
 
 > **Check your understanding**: Run `/lesson-quiz mcp` or `/lesson-quiz subagents` to verify you're ready for Level 3.

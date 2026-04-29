@@ -10,10 +10,10 @@
 
 Before starting Level 3, make sure you're comfortable with these Level 2 concepts:
 
-- [ ] Can create and use skills with auto-invocation ([03-skills/](03-skills/))
-- [ ] Have set up hooks for event-driven automation ([06-hooks/](06-hooks/))
-- [ ] Can configure MCP servers for external data ([05-mcp/](05-mcp/))
-- [ ] Know how to use subagents for task delegation ([04-subagents/](04-subagents/))
+- [ ] Can create and use skills with auto-invocation ([03-skills/](../03-skills/))
+- [ ] Have set up hooks for event-driven automation ([06-hooks/](../06-hooks/))
+- [ ] Can configure MCP servers for external data ([05-mcp/](../05-mcp/))
+- [ ] Know how to use subagents for task delegation ([04-subagents/](../04-subagents/))
 
 > **Gaps?** Review the linked tutorials above before continuing.
 
@@ -91,7 +91,7 @@ export CLAUDE_AGENT_TEAMS=1
 - [ ] Used `/loop` for recurring tasks or scheduled monitoring
 
 #### Next Steps
-- Read: [09-advanced-features/README.md](09-advanced-features/README.md)
+- Read: [09-advanced-features/README.md](../09-advanced-features/README.md)
 
 > **Check your understanding**: Run `/lesson-quiz advanced` to test your mastery of power user features.
 
@@ -160,8 +160,8 @@ Create a simple CI/CD script:
 - **Data Processing**: Transform and analyze data files
 
 #### Next Steps
-- Read: [07-plugins/README.md](07-plugins/README.md)
-- Read: [10-cli/README.md](10-cli/README.md)
+- Read: [07-plugins/README.md](../07-plugins/README.md)
+- Read: [10-cli/README.md](../10-cli/README.md)
 - Create team-wide CLI shortcuts and plugins
 - Set up batch processing scripts
 
