@@ -5,14 +5,14 @@ Use these checklists to track your progress by level. Run `/self-assessment` any
 
 ## 🟢 Level 1: Beginner
 - [x] Completed [01-slash-commands](01-slash-commands/)
-- [ ] Completed [02-memory](02-memory/)
+- [x] Completed [02-memory](02-memory/)
 - [ ] Created first custom slash command
 - [ ] Set up project memory
-- [ ] **Milestone 1A achieved**
-- [ ] Completed [08-checkpoints](08-checkpoints/)
+- [x] **Milestone 1A achieved**
+- [x] Completed [08-checkpoints](08-checkpoints/)
 - [ ] Completed [10-cli](10-cli/) basics
-- [ ] Created and reverted to a checkpoint
-- [ ] Used interactive and print mode
+- [x] Created and reverted to a checkpoint
+- [x] Used interactive and print mode
 - [ ] **Milestone 1B achieved**
 
 ## 🔵 Level 2: Intermediate
