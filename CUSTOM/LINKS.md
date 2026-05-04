@@ -7,6 +7,14 @@ https://github.com/shanraisshan/claude-code-best-practice
 
 ---
 
+## Tutorials
+
+https://github.com/luongnv89/claude-howto
+https://cc.bruniaux.com/
+	https://github.com/FlorianBruniaux/claude-code-ultimate-guide
+
+---
+
 ## Memory
 
 https://github.com/forrestchang/andrej-karpathy-skills
@@ -20,6 +28,11 @@ https://github.com/forrestchang/andrej-karpathy-skills
 https://github.com/affaan-m/everything-claude-code
 https://github.com/tw93/waza
 https://github.com/samber/cc-skills
+
+### engineering
+
+https://github.com/mattpocock/skills
+	https://github.com/mattpocock/skills/tree/main/skills/productivity/write-a-skill
 
 ### golang
 
@@ -36,12 +49,14 @@ https://github.com/google/skills
 https://github.com/obra/superpowers
 
 ---
-
-## Sandbox
-
-https://github.com/jeromer/qdesk
-
 ---
+
+## Tools
+
+## Context
+
+https://github.com/luongnv89/context-stats
+https://github.com/arnaldo-delisio/claude-code-studio
 
 ## Token saving
 
@@ -49,16 +64,6 @@ https://github.com/JuliusBrussee/caveman
 https://github.com/aovestdipaperino/tokensave
 https://github.com/rtk-ai/rtk
 
----
+## Sandbox
 
-## Context management
-
-https://github.com/arnaldo-delisio/claude-code-studio
-
----
-
-## Tutorials
-
-https://github.com/luongnv89/claude-howto
-https://cc.bruniaux.com/
-	https://github.com/FlorianBruniaux/claude-code-ultimate-guide
+https://github.com/jeromer/qdesk
