@@ -523,6 +523,17 @@ All hooks receive JSON input via stdin:
 }
 ```
 
+> **Scope (v2.1.121+):** `hookSpecificOutput.updatedToolOutput` is now honored for **all** tools, not just MCP tools. A `PostToolUse` hook on `Bash`, `Edit`, `Read`, etc. can rewrite the tool's output before Claude sees it — useful for redacting secrets, normalizing diffs, or filtering noisy command output. Example (strip ANSI color codes from a `Bash` output):
+>
+> ```json
+> {
+>   "hookSpecificOutput": {
+>     "hookEventName": "PostToolUse",
+>     "updatedToolOutput": "<plain-text output with ANSI escapes removed>"
+>   }
+> }
+> ```
+
 ## Environment Variables
 
 | Variable | Availability | Description |
@@ -965,6 +976,160 @@ python3 09-advanced-features/setup-auto-mode-permissions.py
 - `DROP TABLE`, `kubectl delete`, `terraform destroy`
 - `npm publish`, `curl | bash`, production deploys
 
+### Example 8: Learning Progress Logger (SessionEnd)
+
+Log which modules you studied at the end of each Claude Code session. Progress is stored
+in `~/.claude-howto-progress.json` — outside the repo, so it survives `git pull` without
+being overwritten.
+
+**Why `SessionEnd` and not `Stop`?**
+`Stop` fires after *every* Claude response. `SessionEnd` fires once when the session
+terminates — exactly what you want for an end-of-session diary entry.
+
+**Why `/dev/tty` for input?**
+Hook scripts receive the hook JSON payload via `stdin`, so interactive `read` must use
+`/dev/tty` directly to reach the terminal.
+
+**File:** `06-hooks/session-end.sh`
+
+```bash
+#!/usr/bin/env bash
+# SessionEnd hook: prompts for modules worked on, then appends a session record
+# to ~/.claude-howto-progress.json for persistent learning progress tracking.
+
+PROGRESS_FILE="$HOME/.claude-howto-progress.json"
+
+# Guard: only run inside this repo
+if [[ "$CLAUDE_PROJECT_DIR" != *"claude-howto"* ]] && [[ "$PWD" != *"claude-howto"* ]]; then
+  exit 0
+fi
+
+if [ ! -f "$PROGRESS_FILE" ]; then
+  echo '{"sessions":[]}' > "$PROGRESS_FILE"
+fi
+
+DATE=$(date +"%Y-%m-%d")
+TIME=$(date +"%H:%M")
+
+echo ""
+echo " Which modules did you work on? (e.g. 06,07 or press Enter to skip)"
+echo " 01=Slash  02=Memory  03=Skills  04=Subagents  05=MCP"
+echo " 06=Hooks  07=Plugins 08=Checkpoints 09=Advanced 10=CLI"
+printf " > "
+read -r INPUT </dev/tty
+
+if [ -z "$INPUT" ] || [ "$INPUT" = "skip" ]; then
+  exit 0
+fi
+
+MODULES_JSON=$(echo "$INPUT" | tr ',' '\n' | tr -d ' ' | while read -r m; do
+  case "$m" in
+    01) echo '"01-slash-commands"' ;;
+    02) echo '"02-memory"' ;;
+    03) echo '"03-skills"' ;;
+    04) echo '"04-subagents"' ;;
+    05) echo '"05-mcp"' ;;
+    06) echo '"06-hooks"' ;;
+    07) echo '"07-plugins"' ;;
+    08) echo '"08-checkpoints"' ;;
+    09) echo '"09-advanced-features"' ;;
+    10) echo '"10-cli"' ;;
+    *)  echo "\"$m\"" ;;
+  esac
+done | paste -sd ',' -)
+
+printf " Notes? (optional, press Enter to skip): "
+read -r NOTES </dev/tty
+
+# Pass NOTES as a separate argument so Python handles JSON escaping —
+# avoids broken JSON when notes contain quotes or backslashes.
+python3 - "$PROGRESS_FILE" "$DATE" "$TIME" "$MODULES_JSON" "$NOTES" <<'PYEOF'
+import sys, json
+
+path, date, time_str, modules_raw, notes = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+
+new_session = {
+    "date": date,
+    "time": time_str,
+    "modules": json.loads(f"[{modules_raw}]") if modules_raw else [],
+    "notes": notes,
+}
+
+with open(path, 'r') as f:
+    data = json.load(f)
+
+data.setdefault('sessions', []).append(new_session)
+
+with open(path, 'w') as f:
+    json.dump(data, f, indent=2)
+PYEOF
+
+echo " Saved to $PROGRESS_FILE"
+```
+
+**Install** — copy the script into the project's hook directory so the path in `settings.json` resolves:
+
+```bash
+mkdir -p .claude/hooks
+cp 06-hooks/session-end.sh .claude/hooks/
+chmod +x .claude/hooks/session-end.sh
+```
+
+**Configuration** (in `.claude/settings.json`):
+
+```json
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/session-end.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Output — `~/.claude-howto-progress.json`:**
+
+```json
+{
+  "sessions": [
+    {
+      "date": "2026-04-18",
+      "time": "14:32",
+      "modules": ["06-hooks", "07-plugins"],
+      "notes": "Installed first hook, tried pre-commit example"
+    }
+  ]
+}
+```
+
+**Key patterns demonstrated:**
+
+| Pattern | Why it matters |
+|---------|----------------|
+| `SessionEnd` event | Fires once on exit — not after every response like `Stop` |
+| `read -r INPUT </dev/tty` | Hooks own `stdin` (JSON payload); use `/dev/tty` for user input |
+| `$CLAUDE_PROJECT_DIR` | Portable path — never hardcode `/Users/yourname/...` |
+| Guard clause at top | Prevents the hook running in unrelated projects if installed globally |
+| Store outside the repo | `~/` path survives `git pull` without overwriting your data |
+
+**Companion: visual progress tracker**
+
+For a full checkbox-based UI covering all 10 modules, open the included tracker in your browser:
+
+```bash
+open local-progress/index.html
+```
+
+Progress is stored in browser `localStorage` (never written to disk inside the repo).
+Use the **Export** button to save a snapshot as JSON, and **Import** to restore it.
+
 ## Plugin Hooks
 
 Plugins can include hooks in their `hooks/hooks.json` file:
@@ -1201,11 +1366,11 @@ Edit `~/.claude/settings.json` or `.claude/settings.json` with the hook configur
 
 ---
 
-**Last Updated**: April 24, 2026
-**Claude Code Version**: 2.1.119
+**Last Updated**: May 6, 2026
+**Claude Code Version**: 2.1.131
 **Sources**:
 - https://code.claude.com/docs/en/hooks
 - https://code.claude.com/docs/en/changelog
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.118
-- https://github.com/anthropics/claude-code/releases/tag/v2.1.119
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.131
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5

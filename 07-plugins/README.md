@@ -576,6 +576,18 @@ GitHub and git sources support optional `ref` (branch/tag) and `sha` (commit has
 
 **Official marketplace submission**: Submit plugins to the Anthropic-curated marketplace for broader distribution via [claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit) or [platform.claude.com/plugins/submit](https://platform.claude.com/plugins/submit).
 
+### Managing Marketplaces
+
+```bash
+# Marketplace CLI commands
+claude plugin marketplace add <source>       # Add marketplace (GitHub, URL, local)
+claude plugin marketplace update [name]      # Refresh catalog index
+claude plugin marketplace remove <name>      # Remove marketplace
+claude plugin marketplace list               # List configured marketplaces
+```
+
+> **Important**: `marketplace update` only refreshes the plugin catalog (what's available to install). It does NOT update installed plugins. Use `plugin update <name>` to update specific installed plugins.
+
 ### Strict mode
 
 Control how marketplace definitions interact with local `plugin.json` files:
@@ -642,14 +654,19 @@ All plugin operations are available as CLI commands:
 ```bash
 claude plugin install <name>@<marketplace>   # Install from a marketplace
 claude plugin uninstall <name>               # Remove a plugin
+claude plugin update <name>                  # Update installed plugin to latest version
 claude plugin list                           # List installed plugins
 claude plugin enable <name>                  # Enable a disabled plugin
 claude plugin disable <name>                 # Disable a plugin
 claude plugin validate                       # Validate plugin structure
 claude plugin tag <version>                  # Create a release git tag with version validation (v2.1.118+)
+claude plugin prune                          # Remove orphaned auto-installed plugin dependencies (v2.1.121+)
+claude plugin uninstall <name> --prune       # Uninstall and cascade-clean orphaned dependencies (v2.1.121+)
 ```
 
 Example: `claude plugin tag v0.3.0` validates the version format, creates the matching git tag, and is the recommended way to cut plugin releases for distribution.
+
+`claude plugin prune` is useful after installing or uninstalling marketplace plugins that pulled in their own dependencies — it removes any auto-installed plugins whose parent plugin has since been removed. `plugin uninstall --prune` does the same cascade in a single step.
 
 ## Installation Methods
 
@@ -671,11 +688,47 @@ claude plugin install plugin-name@marketplace-name
 # CLI flag for local testing (repeatable for multiple plugins)
 claude --plugin-dir ./path/to/plugin
 claude --plugin-dir ./plugin-a --plugin-dir ./plugin-b
+
+# --plugin-dir also accepts a .zip archive path (v2.1.128+)
+claude --plugin-dir ./my-plugin.zip
+
+# Fetch a plugin .zip archive from a URL for the current session (v2.1.129+, repeatable)
+claude --plugin-url https://example.com/releases/my-plugin-0.3.0.zip
 ```
 
 ### From Git Repository
 ```bash
 /plugin install github:username/repo
+```
+
+## Auto-Update
+
+Claude Code can automatically update marketplaces and their installed plugins at startup.
+
+| Marketplace Type | Auto-Update Default | How to Toggle |
+|------------------|---------------------|---------------|
+| Official (`claude-plugins-official`) | ✅ Enabled | `/plugin` → Marketplaces → Select |
+| Third-party / Local | ❌ Disabled | Same UI path |
+
+When auto-update runs, Claude Code:
+1. Refreshes marketplace catalog
+2. Updates installed plugins to latest versions
+3. Shows notification prompting `/reload-plugins`
+
+### Environment Variables
+
+| Variable | Effect |
+|----------|--------|
+| `DISABLE_AUTOUPDATER=1` | Disable all auto-updates (Claude Code + plugins) |
+| `DISABLE_AUTOUPDATER=1` + `FORCE_AUTOUPDATE_PLUGINS=1` | Keep plugin updates, disable Claude Code updates |
+
+```bash
+# Disable all auto-updates
+export DISABLE_AUTOUPDATER=1
+
+# Keep plugin auto-updates only
+export DISABLE_AUTOUPDATER=1
+export FORCE_AUTOUPDATE_PLUGINS=1
 ```
 
 ## When to Create a Plugin
@@ -713,6 +766,12 @@ Before publishing, test your plugin locally using the `--plugin-dir` CLI flag (r
 ```bash
 claude --plugin-dir ./my-plugin
 claude --plugin-dir ./my-plugin --plugin-dir ./another-plugin
+
+# --plugin-dir accepts .zip archives in addition to directories (v2.1.128+)
+claude --plugin-dir ./my-plugin.zip
+
+# --plugin-url fetches a plugin .zip from a URL for this session (v2.1.129+, repeatable)
+claude --plugin-url https://example.com/releases/my-plugin-0.3.0.zip
 ```
 
 This launches Claude Code with your plugin loaded, allowing you to:
@@ -990,12 +1049,12 @@ The following Claude Code features work together with plugins:
 
 ---
 
-**Last Updated**: April 24, 2026
-**Claude Code Version**: 2.1.119
+**Last Updated**: May 6, 2026
+**Claude Code Version**: 2.1.131
 **Sources**:
 - https://code.claude.com/docs/en/plugins
 - https://code.claude.com/docs/en/plugin-marketplaces
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.117
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.118
-- https://github.com/anthropics/claude-code/releases/tag/v2.1.119
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.131
 **Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5

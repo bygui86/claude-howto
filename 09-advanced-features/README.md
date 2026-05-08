@@ -277,7 +277,7 @@ Extended thinking is a deliberate, step-by-step reasoning process where Claude:
 
 **Automatic activation**:
 - Enabled by default for all models (Opus 4.7, Sonnet 4.6, Haiku 4.5)
-- Opus 4.7: Adaptive reasoning with effort levels: `low` (○), `medium` (◐), `high` (●), `xhigh` (default on Claude Code since Opus 4.7 launch, 2026-04-16), `max` (Opus 4.7 only). Opus 4.7 has a 1M-token native context window (1M context fix landed in v2.1.117 — before that, `/context` miscounted Opus 4.7 against a 200K window and triggered premature autocompact).
+- Opus 4.7: Adaptive reasoning with effort levels: `low` (○), `medium` (◐), `high` (●), `xhigh` (Opus 4.7 only, default on Claude Code since Opus 4.7 launch, 2026-04-16), `max`. Opus 4.6 and Sonnet 4.6 also support `low`, `medium`, `high`, `max` (no `xhigh`). Opus 4.7 has a 1M-token native context window (1M context fix landed in v2.1.117 — before that, `/context` miscounted Opus 4.7 against a 200K window and triggered premature autocompact). Since v2.1.129, `/context` shows its visualization in-UI only; the ASCII viz no longer leaks into the conversation context (~1.6k tokens saved per call), so `/context` is safe to invoke freely.
 - Pro/Max subscribers on Opus 4.6 / Sonnet 4.6: default effort was raised from `medium` to `high` in v2.1.117.
 - Other models: Fixed budget up to 31,999 tokens
 
@@ -291,9 +291,9 @@ Extended thinking is a deliberate, step-by-step reasoning process where Claude:
 export MAX_THINKING_TOKENS=1024
 ```
 
-**Effort level** (Opus 4.7 only):
+**Effort level** (supported on Opus 4.7, Opus 4.6, and Sonnet 4.6):
 ```bash
-export CLAUDE_CODE_EFFORT_LEVEL=xhigh   # low (○), medium (◐), high (●), xhigh (default on Opus 4.7), or max (Opus 4.7 only)
+export CLAUDE_CODE_EFFORT_LEVEL=xhigh   # low (○), medium (◐), high (●), xhigh (Opus 4.7 only, default), or max
 ```
 
 **CLI flag**:
@@ -306,7 +306,7 @@ claude --effort high "complex architectural review"
 /effort high
 ```
 
-> **Note:** The keyword "ultrathink" in prompts activates deep reasoning mode. Effort levels `low`, `medium`, `high`, `xhigh` (new, default on Opus 4.7), and `max` (Opus 4.7 only) control how much reasoning Claude performs.
+> **Note:** The keyword "ultrathink" in prompts activates deep reasoning mode. Effort levels `low`, `medium`, `high`, and `max` are supported on Opus 4.7, Opus 4.6, and Sonnet 4.6. `xhigh` (default on Opus 4.7) is Opus 4.7 only.
 
 ### Benefits of Extended Thinking
 
@@ -318,7 +318,7 @@ claude --effort high "complex architectural review"
 ### Example: Architectural Decision
 
 ```
-User: /think Should we use microservices or a monolith for our e-commerce platform?
+User: ultrathink Should we use microservices or a monolith for our e-commerce platform?
 
 Claude: Let me think through this architectural decision carefully...
 
@@ -394,7 +394,7 @@ Extended thinking is controlled via environment variables, keyboard shortcuts, a
 # Set thinking token budget
 export MAX_THINKING_TOKENS=16000
 
-# Set effort level (Opus 4.7 only): low (○), medium (◐), high (●), xhigh (default on Opus 4.7), or max (Opus 4.7 only)
+# Set effort level (Opus 4.7, Opus 4.6, Sonnet 4.6): low (○), medium (◐), high (●), xhigh (Opus 4.7 only, default), or max
 export CLAUDE_CODE_EFFORT_LEVEL=xhigh
 ```
 
@@ -807,6 +807,10 @@ Permission modes control what actions Claude can take without explicit approval.
 
 Cycle through modes with `Shift+Tab` in the CLI. Set a default with the `--permission-mode` flag or the `permissions.defaultMode` setting.
 
+> **`--dangerously-skip-permissions` extended path coverage (v2.1.121, v2.1.126)**: The `--dangerously-skip-permissions` CLI flag (and equivalent `bypassPermissions` mode) now bypasses prompts for writes to a much broader allowlist — `.claude/skills/`, `.claude/agents/`, `.claude/commands/`, `.claude/`, `.git/`, `.vscode/`, and shell config files. Catastrophic removal commands (`rm -rf /`, etc.) still prompt regardless of mode. Treat the flag as a sharper tool than before; use it only in throwaway sandboxes.
+
+> **Windows shell detection (v2.1.120, v2.1.126)**: Git for Windows / Git Bash is no longer required. When Git Bash is absent, Claude Code uses PowerShell as the shell tool. From v2.1.126 PowerShell is the *primary* shell when the PowerShell tool is enabled, and detection covers PowerShell 7 installed via the Microsoft Store, MSI without PATH, or as a `.NET global tool`.
+
 ### Activation Methods
 
 **Keyboard shortcut**:
@@ -1096,7 +1100,7 @@ Claude Code supports keyboard shortcuts for efficiency. Here's the complete refe
 | `Ctrl+G` | Edit plan in external editor |
 | `Ctrl+L` | Clear terminal screen |
 | `Ctrl+O` | Toggle verbose output (view reasoning) |
-| `Ctrl+R` | Reverse search history |
+| `Ctrl+R` | Reverse search history. Defaults to **all prompts across all projects** (v2.1.129+); press `Ctrl+S` inside the picker to narrow to the current project. Earlier versions defaulted to project-only. |
 | `Ctrl+T` | Toggle task list view |
 | `Ctrl+B` | Background running tasks |
 | `Esc+Esc` | Rewind code/conversation |
@@ -1366,6 +1370,8 @@ Customize the push-to-talk keybinding in your keybindings file (`/keybindings`).
 
 Channels is a Research Preview feature that pushes events from external services into a running Claude Code session via MCP servers. Sources include Telegram, Discord, iMessage, and arbitrary webhooks, allowing Claude to react to real-time notifications without polling.
 
+> **Auth (v2.1.128+)**: `--channels` now works with both Pro/Max OAuth **and** API-key (console) authentication. Earlier releases required OAuth.
+
 ### Subscribing to Channels
 
 ```bash
@@ -1534,6 +1540,18 @@ To enable:
 2. Open `/config` and enable **Push when Claude decides**
 
 Push notifications require a Claude subscription and the Claude mobile app.
+
+### Disabling Remote Control (`disableRemoteControl`, v2.1.128+)
+
+Admins on Team or Enterprise plans can block Remote Control entirely with the `disableRemoteControl` setting. When `true`, both `claude remote-control` and `/remote-control` refuse to start.
+
+```json
+{
+  "disableRemoteControl": true
+}
+```
+
+The setting is honored at the **managed/policy** scope (e.g., `/Library/Application Support/ClaudeCode/managed-settings.json` on macOS) so it cannot be overridden by individual users. Useful when local-only execution must be enforced organization-wide.
 
 ---
 
@@ -1965,7 +1983,7 @@ export ANTHROPIC_API_KEY=sk-ant-...
 
 # Thinking configuration
 export MAX_THINKING_TOKENS=16000
-export CLAUDE_CODE_EFFORT_LEVEL=xhigh   # low, medium, high, xhigh (default on Opus 4.7), or max (Opus 4.7 only)
+export CLAUDE_CODE_EFFORT_LEVEL=xhigh   # low, medium, high, xhigh (Opus 4.7 only, default), or max (supported on Opus 4.7, Opus 4.6, Sonnet 4.6)
 
 # Feature toggles
 export CLAUDE_CODE_DISABLE_AUTO_MEMORY=true
@@ -2003,9 +2021,16 @@ export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=80
 export CLAUDE_STREAM_IDLE_TIMEOUT_MS=30000
 export ANTHROPIC_CUSTOM_MODEL_OPTION=my-custom-model
 export SLASH_COMMAND_TOOL_CHAR_BUDGET=50000
+
+# Output and package manager (v2.1.129+)
+export CLAUDE_CODE_FORCE_SYNC_OUTPUT=1                      # Force synchronous output for terminals where auto-detect misses (Emacs eat, etc.)
+export CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1            # Enable background upgrades for Homebrew/WinGet installs
+export CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1         # Opt in to /v1/models gateway discovery when ANTHROPIC_BASE_URL is set
 ```
 
-> **v2.1.108**: `ENABLE_PROMPT_CACHING_1H=1` — use a 1-hour prompt cache TTL instead of the default 5-minute TTL. Reduces cache misses in long, stable sessions.
+> **v2.1.108**: `ENABLE_PROMPT_CACHING_1H=1` — use a 1-hour prompt cache TTL instead of the default 5-minute TTL. Reduces cache misses in long, stable sessions. (v2.1.129 fixes a regression where the 1-hour TTL was silently downgraded to 5 minutes.)
+
+> **v2.1.129**: `CLAUDE_CODE_FORCE_SYNC_OUTPUT=1` forces synchronous output for terminals whose capability auto-detection fails (e.g., Emacs `eat`). `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` enables background upgrades on Homebrew/WinGet installs, which otherwise never auto-update.
 
 ### Configuration Management Commands
 
@@ -2162,8 +2187,8 @@ For more information about Claude Code and related features:
 
 ---
 
-**Last Updated**: April 24, 2026
-**Claude Code Version**: 2.1.119
+**Last Updated**: May 6, 2026
+**Claude Code Version**: 2.1.131
 **Sources**:
 - https://code.claude.com/docs/en/permission-modes
 - https://code.claude.com/docs/en/interactive-mode

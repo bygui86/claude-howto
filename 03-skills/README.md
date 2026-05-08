@@ -66,19 +66,20 @@ This means you can install many Skills without context penalty—Claude only kno
 ```mermaid
 sequenceDiagram
     participant User
-    participant Claude as Claude
-    participant System as System
-    participant Skill as Skill
+    participant Claude
+    participant System
+    participant SkillInst as Skill Instructions
+    participant SkillRes as Skill Resources
 
     User->>Claude: "Review this code for security issues"
     Claude->>System: Check available skills (metadata)
     System-->>Claude: Skill descriptions loaded at startup
     Claude->>Claude: Match request to skill description
-    Claude->>Skill: bash: read code-review/SKILL.md
-    Skill-->>Claude: Instructions loaded into context
+    Claude->>SkillInst: Read code-review/SKILL.md
+    SkillInst-->>Claude: Level 2: Instructions loaded
     Claude->>Claude: Determine: Need templates?
-    Claude->>Skill: bash: read templates/checklist.md
-    Skill-->>Claude: Template loaded
+    Claude->>SkillRes: Read templates/checklist.md
+    SkillRes-->>Claude: Level 3: Template loaded
     Claude->>Claude: Execute skill instructions
     Claude->>User: Comprehensive code review
 ```
@@ -149,7 +150,7 @@ disable-model-invocation: true              # Only user can invoke
 user-invocable: false                       # Hide from slash menu
 allowed-tools: Read, Grep, Glob             # Restrict tool access
 model: opus                                 # Specific model to use
-effort: high                                # Effort level override (low, medium, high, max)
+effort: high                                # Effort level override (low, medium, high, xhigh, max)
 context: fork                               # Run in isolated subagent
 agent: Explore                              # Which agent type (with context: fork)
 shell: bash                                 # Shell for commands: bash (default) or powershell
@@ -172,7 +173,7 @@ paths: "src/api/**/*.ts"               # Glob patterns limiting when skill activ
 | `user-invocable` | `false` = hidden from the `/` menu. Only Claude can invoke it automatically. |
 | `allowed-tools` | Comma-separated list of tools the skill may use without permission prompts. |
 | `model` | Model override while the skill is active (e.g., `opus`, `sonnet`). |
-| `effort` | Effort level override while the skill is active: `low`, `medium`, `high`, or `max`. |
+| `effort` | Effort level override while the skill is active: `low`, `medium`, `high`, `xhigh`, or `max`. Available levels depend on the model — `xhigh` is the Claude Code default for Opus 4.7. |
 | `context` | `fork` to run the skill in a forked subagent context with its own context window. |
 | `agent` | Subagent type when `context: fork` (e.g., `Explore`, `Plan`, `general-purpose`). |
 | `shell` | Shell used for `!`command`` substitutions and scripts: `bash` (default) or `powershell`. |
@@ -241,6 +242,7 @@ Skills support dynamic values that are resolved before the skill content reaches
 | `$ARGUMENTS[N]` or `$N` | Access specific argument by index (0-based) |
 | `${CLAUDE_SESSION_ID}` | Current session ID |
 | `${CLAUDE_SKILL_DIR}` | Directory containing the skill's SKILL.md file |
+| `${CLAUDE_EFFORT}` | Current effort level (`low`, `medium`, `high`, `xhigh`, or `max`). Useful for branching skill behavior: e.g., `[ "${CLAUDE_EFFORT}" = "max" ] && deep_analysis` (v2.1.120+) |
 | `` !`command` `` | Dynamic context injection — runs a shell command and inlines the output |
 
 **Example:**
@@ -597,6 +599,8 @@ ls ~/.claude/skills/
 ls .claude/skills/
 ```
 
+> **Tip (v2.1.121+):** Type to filter the `/skills` interactive menu — useful when many skills are installed.
+
 ### Testing a Skill
 
 Two ways to test:
@@ -644,6 +648,27 @@ Skill(deploy *)
 ```
 
 **Hide individual skills** by adding `disable-model-invocation: true` to their frontmatter.
+
+### Controlling Skill Override Behavior (`skillOverrides`)
+
+When a project skill and a user skill share the same name, project wins by default. The `skillOverrides` setting (v2.1.129+) lets you tune this. Add it to `~/.claude/settings.json` or project `.claude/settings.json`:
+
+```json
+{
+  "skillOverrides": "name-only"
+}
+```
+
+Accepted values:
+
+| Value | Behavior |
+|-------|----------|
+| `"on"` (default) | A repo skill can override a user skill of the same name. |
+| `"off"` | Disable overriding entirely — user skills always win. |
+| `"name-only"` | Match overrides only on skill name (ignore description / source). |
+| `"user-invocable-only"` | Only user-invocable skills can be overridden — model-invoked skills always come from their original location. |
+
+Useful when team policy says "user-defined skills must always take precedence" (`"off"`) or "only allow narrow name-based overrides" (`"name-only"`).
 
 ## Best Practices
 
@@ -819,8 +844,8 @@ Once you start building skills seriously, two things become essential: a library
 - [Hooks Guide](../06-hooks/) - Event-driven automation
 
 ---
-**Last Updated**: April 24, 2026
-**Claude Code Version**: 2.1.119
+**Last Updated**: May 6, 2026
+**Claude Code Version**: 2.1.131
 **Sources**:
 - https://code.claude.com/docs/en/skills
 - https://code.claude.com/docs/en/settings
