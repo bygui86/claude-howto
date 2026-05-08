@@ -28,11 +28,23 @@
 │	├── rule-B.md
 │	└── ...
 │
-├── skills/				# auto-invoked workflows (context aware automatic workflows) + custom slash commands (repeatable manual workflows)
+├── skills/					# auto-invoked workflows (context aware automatic workflows) + custom slash commands (repeatable manual workflows)
 │	├── skill-A/
-│	│	└── SKILL.md
+│	│	├── examples/
+│	│	│	└── sample.md 		# Example output showing expected format
+│	│	│
+│	│	├── scripts/			# Scripts Claude can execute
+│	│	│	└── script-A.sh
+│	│	│	└── script-B.py
+│	│	│
+│	│	├── templates/
+│	│	│	└── template-A.sh 	# Template for Claude to fill in
+│	│	│
+│	│	└── SKILL.md 			# Main instructions (required)
+│	│
 │	├── skill-B/
 │	│	└── SKILL.md
+│	│
 │	└── ...
 │
 ├── CLAUDE.md 			# global personal memory
@@ -59,9 +71,21 @@ project/
 │	│
 │	├── skills/					# auto-invoked workflows (context aware automatic workflows) + custom slash commands (repeatable manual workflows)
 │	│	├── skill-A/
-│	│	│	└── SKILL.md
+│	│	│	├── examples/
+│	│	│	│	└── sample.md 		# Example output showing expected format
+│	│	│	│
+│	│	│	├── scripts/			# Scripts Claude can execute
+│	│	│	│	└── script-A.sh
+│	│	│	│	└── script-B.py
+│	│	│	│
+│	│	│	├── templates/
+│	│	│	│	└── template-A.sh 	# Template for Claude to fill in
+│	│	│	│
+│	│	│	└── SKILL.md 			# Main instructions (required)
+│	│	│
 │	│	├── skill-B/
 │	│	│	└── SKILL.md
+│	│	│
 │	│	└── ...
 │	│
 │	├── settings.json			# project shared permissions + config / committed to git repo
