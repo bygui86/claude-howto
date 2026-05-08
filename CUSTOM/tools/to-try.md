@@ -1,7 +1,7 @@
 
 # Absolutely to try
 
-Review `LINKS.md` to get some more
+Review `../links/*.md` to get some more
 
 ## code commands
 
