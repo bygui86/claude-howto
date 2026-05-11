@@ -1,5 +1,5 @@
 
-# Skills
+# Links
 
 ## generalist
 
@@ -9,8 +9,10 @@ https://github.com/samber/cc-skills
 
 ## engineering
 
-https://github.com/mattpocock/skills
+https://www.aihero.dev/5-agent-skills-i-use-every-day
+	https://github.com/mattpocock/skills
 	https://github.com/mattpocock/skills/tree/main/skills/productivity/write-a-skill
+https://github.com/tw93/waza
 
 ## golang
 

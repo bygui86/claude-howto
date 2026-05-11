@@ -1,6 +1,8 @@
 
 # General
 
+## Best practices
+
 https://github.com/shanraisshan/claude-code-best-practice
 
 ---
@@ -13,13 +15,6 @@ https://cc.bruniaux.com/
 
 ---
 
-## .claude folder structure
+## Articles
 
-https://code.claude.com/docs/en/claude-directory#ce-claude-md
-https://blog.dailydoseofds.com/p/anatomy-of-the-claude-folder
-
----
-
-## Memory
-
-https://github.com/forrestchang/andrej-karpathy-skills
+https://www.xda-developers.com/set-up-claude-code-like-boris-cherny/
