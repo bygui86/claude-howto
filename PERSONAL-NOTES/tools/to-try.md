@@ -15,6 +15,7 @@ CLAUDE_CODE_DISABLE_AUTO_MEMORY / Disable automatic CLAUDE.md updates
 
 ### context
 
+https://code.claude.com/docs/en/statusline
 https://github.com/luongnv89/context-stats
 https://github.com/arnaldo-delisio/claude-code-studio
 
