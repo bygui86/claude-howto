@@ -1,5 +1,5 @@
 
-# Do's - What To Include
+# ✅ Do's - What To Include
 
 - Be specific and detailed: Use clear, detailed instructions rather than vague guidance
   - ✅ Good: "Use 2-space indentation for all JavaScript files"
@@ -26,7 +26,7 @@
 
 - Provide concrete examples: Include code snippets and specific scenarios
 
-# Don'ts - What To Avoid
+# ❌ Don'ts - What To Avoid
 
 - Don't store secrets: Never include API keys, passwords, tokens, or credentials
 
