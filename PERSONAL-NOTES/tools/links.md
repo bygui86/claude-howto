@@ -6,10 +6,10 @@
 https://code.claude.com/docs/en/statusline
 https://github.com/luongnv89/context-stats
 https://github.com/arnaldo-delisio/claude-code-studio
+https://github.com/thedotmack/claude-mem
 
 ## Token saving
 
-https://github.com/JuliusBrussee/caveman
 https://github.com/aovestdipaperino/tokensave
 https://github.com/rtk-ai/rtk
 https://github.com/scheidydude/codeindex
@@ -19,9 +19,18 @@ https://github.com/scheidydude/codeindex
 
 https://github.com/Pinperepette/agd-memory
 
+## Skills
+
+https://github.com/NVIDIA/SkillSpector
+https://www.skills.sh/
+
 ## Sandbox
 
 https://github.com/jeromer/qdesk
+
+## Markdown
+
+https://github.com/microsoft/markitdown
 
 ## IDE
 

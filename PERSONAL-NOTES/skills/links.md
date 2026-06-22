@@ -1,11 +1,19 @@
 
 # Links
 
+## token saving
+
+https://github.com/JuliusBrussee/caveman
+
 ## generalist
 
-https://github.com/affaan-m/everything-claude-code
 https://github.com/tw93/waza
 https://github.com/samber/cc-skills
+
+## knowledge base
+
+https://github.com/charlie947/ai-second-brain
+https://github.com/PleasePrompto/notebooklm-skill
 
 ## engineering
 
@@ -18,6 +26,14 @@ https://github.com/tw93/waza
 
 https://github.com/samber/cc-skills-golang
 
+## frontend / ui
+
+https://github.com/anthropics/skills/tree/main/skills/frontend-design
+
 ## google
 
 https://github.com/google/skills
+
+## writing
+
+https://github.com/blader/humanizer
