@@ -1,6 +1,6 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../resources/logos/claude-howto-logo-dark.svg">
-  <img alt="Claude How To" src="../resources/logos/claude-howto-logo.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="../../resources/logos/claude-howto-logo-dark.svg">
+  <img alt="Claude How To" src="../../resources/logos/claude-howto-logo.svg">
 </picture>
 
 # Tham Chiếu CLI / CLI Reference
@@ -756,7 +756,7 @@ claude -p --output-format json "query"
 
 | Trường Hợp Sử Dụng | Lệnh |
 |----------|---------|
-| Quick code review | `cat file | claude -p "review"` |
+| Quick code review | `cat file \| claude -p "review"` |
 | Structured output | `claude -p --output-format json "query"` |
 | Safe exploration | `claude --permission-mode plan` |
 | Autonomous with safety | `claude --enable-auto-mode --permission-mode auto` |

@@ -28,10 +28,10 @@ cp 02-memory/personal-CLAUDE.md ~/.claude/CLAUDE.md
 ### Skills
 ```bash
 # Personal skills
-cp -r 03-skills/code-review ~/.claude/skills/
+cp -r 03-skills/code-review-specialist ~/.claude/skills/
 
 # Project skills
-cp -r 03-skills/code-review .claude/skills/
+cp -r 03-skills/code-review-specialist .claude/skills/
 ```
 
 ### Subagents
@@ -118,7 +118,7 @@ claude -r "session"    # Resume session by name/ID
 | **Skills** | `.claude/skills/*/SKILL.md` | Auto-invoked |
 | **Subagents** | `.claude/agents/*.md` | Auto-delegated |
 | **MCP** | `.mcp.json` (project) or `~/.claude.json` (user) | `/mcp__server__action` |
-| **Hooks (28 events)** | `~/.claude/hooks/*.sh` | Event-triggered (5 types) |
+| **Hooks (29 events)** | `~/.claude/hooks/*.sh` | Event-triggered (5 types) |
 | **Plugins** | Via `/plugin install` | Bundles all |
 | **Checkpoints** | Built-in | `Esc+Esc` or `/rewind` |
 | **Planning Mode** | Built-in | `/plan <task>` |
@@ -130,7 +130,7 @@ claude -r "session"    # Resume session by name/ID
 | **Git Worktrees** | Built-in | `/worktree` |
 | **Auto Memory** | Built-in | Auto-saves to CLAUDE.md |
 | **Task List** | Built-in | `/task list` |
-| **Bundled Skills (5)** | Built-in | `/simplify`, `/loop`, `/claude-api`, `/voice`, `/browse` |
+| **Bundled Skills (10)** | Built-in | `/batch`, `/claude-api`, `/code-review`, `/simplify` *(cleanup-only review; distinct from `/code-review` again since v2.1.154)*, `/debug`, `/fewer-permission-prompts`, `/loop`, `/run` *(v2.1.145+)*, `/run-skill-generator` *(v2.1.145+)*, `/verify` *(v2.1.145+)* |
 
 ---
 
@@ -147,7 +147,7 @@ cp 04-subagents/code-reviewer.md .claude/agents/
 # Use: Auto-delegated
 
 # Method 3: Skill
-cp -r 03-skills/code-review ~/.claude/skills/
+cp -r 03-skills/code-review-specialist ~/.claude/skills/
 # Use: Auto-invoked
 
 # Method 4: Plugin (best)
@@ -189,7 +189,7 @@ vim CLAUDE.md
 
 ### Automation & Hooks
 ```bash
-# Install hooks (28 events, 5 types: command, http, mcp_tool, prompt, agent)
+# Install hooks (29 events, 5 types: command, http, mcp_tool, prompt, agent)
 mkdir -p ~/.claude/hooks
 cp 06-hooks/*.sh ~/.claude/hooks/
 chmod +x ~/.claude/hooks/*.sh
@@ -363,7 +363,7 @@ cp 05-mcp/github-mcp.json .mcp.json
 ### Week 2
 ```bash
 # Install skill
-cp -r 03-skills/code-review ~/.claude/skills/
+cp -r 03-skills/code-review-specialist ~/.claude/skills/
 
 # Let it auto-invoke
 # Just say: "Review this code for issues"
@@ -382,14 +382,14 @@ cp -r 03-skills/code-review ~/.claude/skills/
 
 ---
 
-## New Features (March 2026)
+## New Features (May 2026)
 
 | Feature | Description | Usage |
 |---------|-------------|-------|
 | **Auto Mode** | Fully autonomous operation with background classifier | `--enable-auto-mode` flag, `Shift+Tab` to cycle modes |
 | **Channels** | Discord and Telegram integration | `--channels` flag, Discord/Telegram bots |
 | **Voice Dictation** | Speak commands and context to Claude | `/voice` command |
-| **Hooks (28 events)** | Expanded hook system with 5 types | command, http, mcp_tool, prompt, agent hook types |
+| **Hooks (29 events)** | Expanded hook system with 5 types | command, http, mcp_tool, prompt, agent hook types |
 | **MCP Elicitation** | MCP servers can request user input at runtime | Auto-prompted when server needs clarification |
 | **Plugin LSP** | Language Server Protocol support for plugins | `userConfig`, `${CLAUDE_PLUGIN_DATA}` variable |
 | **Remote Control** | Control Claude Code via WebSocket API | `claude --remote` for external integrations |
@@ -398,11 +398,16 @@ cp -r 03-skills/code-review ~/.claude/skills/
 | **Task List** | Manage background tasks | `/task list`, `/task status <id>` |
 | **Auto Memory** | Automatic memory saving from conversations | Claude auto-saves key context to CLAUDE.md |
 | **Git Worktrees** | Isolated workspaces for parallel development | `/worktree` to create isolated workspace |
-| **Model Selection** | Switch between Sonnet 4.6, Opus 4.7, and Haiku 4.5 | `/model` or `--model` flag |
+| **Model Selection** | Switch between Sonnet 4.6, Opus 4.8, and Haiku 4.5 | `/model` — since v2.1.153 the choice is saved as the default for new sessions; press `s` for session-only |
 | **Agent Teams** | Coordinate multiple agents on tasks | Enable with `CLAUDE_AGENT_TEAMS=1` env var |
+| **Dynamic Workflows** *(v2.1.154)* | Deterministic multi-agent orchestration | `/workflows` to view runs; ask Claude to create one |
 | **Scheduled Tasks** | Recurring tasks with `/loop` | `/loop 5m /command` or CronCreate tool |
 | **Chrome Integration** | Browser automation | `--chrome` flag or `/chrome` command |
 | **Keyboard Customization** | Custom keybindings | `/keybindings` command |
+| **/usage-credits** | Configure extra usage limits (renamed from `/extra-usage` in v2.1.144; old name still works as alias) | `/usage-credits` |
+| **/run** *(v2.1.145+)* | Launch this project's app to see a change running | `/run` |
+| **/verify** *(v2.1.145+)* | Build, run, and observe the app to confirm a fix works | `/verify` |
+| **/run-skill-generator** *(v2.1.145+)* | Teach `/run`/`/verify` how to handle a specific project | `/run-skill-generator` |
 
 ---
 
@@ -441,10 +446,10 @@ echo $GITHUB_TOKEN
 |------|----------|---------|
 | Quick shortcut | Slash Command (60+) | `01-slash-commands/optimize.md` |
 | Team standards | Memory | `02-memory/project-CLAUDE.md` |
-| Auto workflow | Skill | `03-skills/code-review/` |
+| Auto workflow | Skill | `03-skills/code-review-specialist/` |
 | Specialized task | Subagent | `04-subagents/code-reviewer.md` |
 | External data | MCP (+ Elicitation) | `05-mcp/github-mcp.json` |
-| Event automation | Hook (28 events, 5 types) | `06-hooks/pre-commit.sh` |
+| Event automation | Hook (29 events, 5 types) | `06-hooks/pre-commit.sh` |
 | Complete solution | Plugin (+ LSP support) | `07-plugins/pr-review/` |
 | Safe experiment | Checkpoint | `08-checkpoints/checkpoint-examples.md` |
 | Fully autonomous | Auto Mode | `--enable-auto-mode` or `Shift+Tab` |
@@ -504,11 +509,12 @@ Getting started checklist:
 **This Card**: Keep it handy for quick reference!
 
 ---
-**Last Updated**: May 6, 2026
-**Claude Code Version**: 2.1.131
+**Last Updated**: June 2, 2026
+**Claude Code Version**: 2.1.160
 **Sources**:
 - https://code.claude.com/docs/en/overview
 - https://code.claude.com/docs/en/hooks
 - https://code.claude.com/docs/en/commands
-- https://github.com/anthropics/claude-code/releases/tag/v2.1.131
-**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.153
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.154
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5

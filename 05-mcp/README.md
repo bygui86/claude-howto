@@ -97,6 +97,29 @@ claude mcp add --transport stdio myserver -- npx @myorg/mcp-server
 claude mcp add --transport stdio myserver --env KEY=value -- npx server
 ```
 
+#### `CLAUDE_PROJECT_DIR` for stdio servers (v2.1.139+)
+
+Every MCP stdio server is spawned with `CLAUDE_PROJECT_DIR=<absolute path to repo root>` already set in its environment — the same convention used for hooks. Plugin and project `.mcp.json` files can reference `${CLAUDE_PROJECT_DIR}` in the `command`, `args`, and `env` values, and the substitution happens before `execve()`:
+
+```json
+{
+  "mcpServers": {
+    "repo-tools": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${CLAUDE_PROJECT_DIR}/.claude/mcp/repo-tools.js"],
+      "env": {
+        "REPO_ROOT": "${CLAUDE_PROJECT_DIR}"
+      }
+    }
+  }
+}
+```
+
+Use this when your stdio server needs to read files relative to the project root regardless of where Claude Code was launched.
+
+stdio MCP servers also receive `CLAUDE_CODE_SESSION_ID` (matching the value passed to hooks and Bash), including when the session is resumed with `--resume` (v2.1.163+).
+
 ### SSE Transport (Deprecated)
 
 Server-Sent Events transport is deprecated in favor of `http` but still supported:
@@ -265,6 +288,13 @@ For example, if a server named `github` exposes a prompt called `review`, you ca
 
 When the same MCP server is defined at multiple scopes (local, project, user), the local configuration takes precedence. This allows you to override project-level or user-level MCP settings with local customizations without conflicts.
 
+## Recent Lifecycle Fixes (v2.1.136)
+
+Two long-standing MCP lifecycle bugs were fixed in v2.1.136 — worth upgrading for if you run multi-server setups:
+
+- **MCP servers persist across `/clear`**: Servers configured via `.mcp.json`, plugins, or claude.ai connectors no longer disappear after `/clear` in VS Code, JetBrains, or the Agent SDK. Earlier versions silently dropped them and required a restart.
+- **OAuth refresh-token concurrent-refresh fix**: Multi-server OAuth setups no longer lose refresh tokens when several servers race to refresh simultaneously. This eliminates the "every morning I have to re-auth" pattern that affected setups with multiple OAuth-protected MCP servers.
+
 ## MCP Resources via @ Mentions
 
 You can reference MCP resources directly in your prompts using the `@` mention syntax:
@@ -331,9 +361,17 @@ claude mcp remove github
 # Reset project-specific approval choices
 claude mcp reset-project-choices
 
+# Authenticate an MCP server from the CLI (v2.1.186+)
+claude mcp login github
+
+# Sign out of an MCP server (v2.1.186+)
+claude mcp logout github
+
 # Import from Claude Desktop
 claude mcp add-from-claude-desktop
 ```
+
+`claude mcp login <name>` / `claude mcp logout <name>` are the non-interactive equivalent of the OAuth flow in the `/mcp` menu — authenticate or sign out without opening it. Add `--no-browser` to `login` to complete OAuth over SSH or in a headless session (it redirects the flow through stdin).
 
 ## Available MCP Servers Table
 
@@ -667,6 +705,7 @@ For enterprise deployments, IT administrators can enforce MCP server policies th
 **Features:**
 - `allowedMcpServers` -- whitelist of permitted servers
 - `deniedMcpServers` -- blocklist of prohibited servers
+- `allowAllClaudeAiMcps` -- managed setting that permits loading claude.ai cloud MCP connectors organization-wide (v2.1.149+)
 - Supports matching by server name, command, and URL patterns
 - Organization-wide MCP policies enforced before user configuration
 - Prevents unauthorized server connections
@@ -1139,10 +1178,13 @@ export GITHUB_TOKEN="your_token"
 
 ---
 
-**Last Updated**: May 6, 2026
-**Claude Code Version**: 2.1.131
+**Last Updated**: June 24, 2026
+**Claude Code Version**: 2.1.187
 **Sources**:
 - https://code.claude.com/docs/en/mcp
 - https://code.claude.com/docs/en/changelog
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.117
-**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.139
+- https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+- https://docs.anthropic.com/en/docs/claude-code/mcp
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5

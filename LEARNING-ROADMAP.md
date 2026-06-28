@@ -102,7 +102,7 @@ graph TD
 | **3** | [Checkpoints](08-checkpoints/) | ⭐⭐ Intermediate | 45 min | Level 1 | Session management | Safe exploration | Experimentation, recovery |
 | **4** | [CLI Basics](10-cli/) | ⭐⭐ Beginner+ | 30 min | Level 1 | None | Core CLI usage | Interactive & print mode |
 | **5** | [Skills](03-skills/) | ⭐⭐ Intermediate | 1 hour | Level 2 | Slash Commands | Automatic expertise | Reusable capabilities, consistency |
-| **6** | [Hooks](06-hooks/) | ⭐⭐ Intermediate | 1 hour | Level 2 | Tools, Commands | Workflow automation (28 events, 5 types) | Validation, quality gates |
+| **6** | [Hooks](06-hooks/) | ⭐⭐ Intermediate | 1 hour | Level 2 | Tools, Commands | Workflow automation (29 events, 5 types) | Validation, quality gates |
 | **7** | [MCP](05-mcp/) | ⭐⭐⭐ Intermediate+ | 1 hour | Level 2 | Configuration | Live data access | Real-time integration, APIs |
 | **8** | [Subagents](04-subagents/) | ⭐⭐⭐ Intermediate+ | 1.5 hours | Level 2 | Memory, Commands | Complex task handling (6 built-in including Bash) | Delegation, specialized expertise |
 | **9** | [Advanced Features](09-advanced-features/) | ⭐⭐⭐⭐⭐ Advanced | 2-3 hours | Level 3 | All previous | Power user tools | Planning, Auto Mode, Channels, Voice Dictation, permissions |
@@ -235,7 +235,7 @@ Before starting Level 2, make sure you're comfortable with these Level 1 concept
 
 #### What You'll Achieve
 ✅ Auto-invoke specialized capabilities with YAML frontmatter (including `effort` and `shell` fields)
-✅ Set up event-driven automation across 28 hook events
+✅ Set up event-driven automation across 29 hook events
 ✅ Use all 5 hook types (command, http, mcp_tool, prompt, agent)
 ✅ Enforce code quality standards
 ✅ Create custom hooks for your workflow
@@ -244,7 +244,7 @@ Before starting Level 2, make sure you're comfortable with these Level 1 concept
 
 ```bash
 # Exercise 1: Install a skill
-cp -r 03-skills/code-review ~/.claude/skills/
+cp -r 03-skills/code-review-specialist ~/.claude/skills/
 
 # Exercise 2: Set up hooks
 mkdir -p ~/.claude/hooks
@@ -543,7 +543,7 @@ This repository includes two interactive skills you can use anytime in Claude Co
 
 1. **Slash commands** (15 min): Copy and test `/optimize` and `/pr`
 2. **Project memory** (15 min): Create CLAUDE.md with your project standards
-3. **Install a skill** (15 min): Set up code-review skill
+3. **Install a skill** (15 min): Set up code-review-specialist skill
 4. **Try them together** (15 min): See how they work in harmony
 
 **Outcome**: Basic productivity boost with commands, memory, and auto-skills
@@ -738,13 +738,14 @@ Once you've completed all milestones:
 
 ---
 
-**Last Updated**: May 6, 2026
-**Claude Code Version**: 2.1.131
+**Last Updated**: June 2, 2026
+**Claude Code Version**: 2.1.160
 **Sources**:
 - https://code.claude.com/docs/en/overview
 - https://code.claude.com/docs/en/hooks
-- https://github.com/anthropics/claude-code/releases/tag/v2.1.131
-**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.144
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.145
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5
 **Maintained by**: Claude How-To Contributors
 **License**: Educational purposes, free to use and adapt
 

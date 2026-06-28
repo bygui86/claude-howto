@@ -76,6 +76,8 @@ Subagent files can be stored in multiple locations with different scopes:
 
 When duplicate names exist, higher-priority sources take precedence.
 
+> **Nested `.claude/` precedence (v2.1.178)**: When the same agent name is defined in multiple nested `.claude/agents/` directories (for example, a monorepo with package-level `.claude/` folders), the definition **closest to your current working directory wins**. The same closest-wins rule applies to nested workflow and output-style definitions.
+
 ---
 
 ## Configuration
@@ -124,7 +126,7 @@ to solving problems.
 | `model` | No | Model to use: `sonnet`, `opus`, `haiku`, full model ID, or `inherit`. Defaults to configured subagent model |
 | `permissionMode` | No | `default`, `acceptEdits`, `dontAsk`, `bypassPermissions`, `plan` |
 | `maxTurns` | No | Maximum number of agentic turns the subagent can take |
-| `skills` | No | Comma-separated list of skills to preload. Injects full skill content into the subagent's context at startup |
+| `skills` | No | Comma-separated list of skills to preload. Injects full skill content into the subagent's context at startup. **v2.1.133+:** subagents also discover project, user, and plugin skills via the Skill tool — same catalog as the main session, no longer limited to their own embedded set. |
 | `mcpServers` | No | MCP servers to make available to the subagent |
 | `hooks` | No | Component-scoped hooks (PreToolUse, PostToolUse, Stop) |
 | `memory` | No | Persistent memory directory scope: `user`, `project`, or `local` |
@@ -386,6 +388,8 @@ You can explicitly request a specific subagent:
 > Have the code-reviewer subagent look at my recent changes
 > Ask the debugger subagent to investigate this error
 ```
+
+> **Case- and separator-insensitive `subagent_type` matching (v2.1.140)**: `subagent_type` (in `Agent` tool calls or `--agent` flags) is matched case-insensitively and ignores separator style — `code-reviewer`, `Code Reviewer`, and `code_reviewer` all resolve to the same agent. This removes a long-standing footgun where minor capitalization differences silently fell back to the default agent.
 
 ### @-Mention Invocation
 
@@ -703,6 +707,7 @@ Control how teammate activity is displayed:
 | **Auto** | `--teammate-mode auto` | Automatically chooses the best display mode for your terminal |
 | **In-process** (default) | `--teammate-mode in-process` | Shows teammate output inline in the current terminal |
 | **Split-panes** | `--teammate-mode tmux` | Opens each teammate in a separate tmux or iTerm2 pane |
+| **iTerm2** | `--teammate-mode iterm2` | (v2.1.186+) Spawns teammates in dedicated iTerm2 panes. Requires the `it2` CLI; auto mode warns when it can't be found |
 
 ```bash
 claude --teammate-mode tmux
@@ -899,7 +904,7 @@ graph TB
 
 ### Key Behaviors
 
-- **No nested spawning** - Subagents cannot spawn other subagents
+- **Nested spawning (up to 5 levels)** - As of v2.1.172, subagents can spawn their own subagents, nested up to 5 levels deep. Earlier versions did not allow any nesting. Use the `Agent(agent_type)` restriction syntax (see [Restrict Spawnable Subagents](#restrict-spawnable-subagents)) to control which subagents a given subagent may spawn
 - **Background permissions** - Background subagents auto-deny any permissions that are not pre-approved
 - **Backgrounding** - Press `Ctrl+B` to background a currently running task
 - **Transcripts** - Subagent transcripts are stored at `~/.claude/projects/{project}/{sessionId}/subagents/agent-{agentId}.jsonl`
@@ -1206,6 +1211,25 @@ graph TD
 
 ---
 
+## Observability
+
+> **Added in v2.1.139.**
+
+API requests originating from a subagent carry two extra HTTP headers so traces and logs can be correlated back to the dispatching session:
+
+| Header | Description |
+|--------|-------------|
+| `x-claude-code-agent-id` | UUID of the subagent making the request. |
+| `x-claude-code-parent-agent-id` | UUID of the agent that dispatched this subagent (the main agent, or a higher-level subagent in a chain). |
+
+The same identifiers are exposed on `claude_code.llm_request` OpenTelemetry spans as the attributes `claude.code.agent.id` and `claude.code.agent.parent_id`. Use them to:
+
+- Attribute API spend to a specific subagent type rather than the parent session
+- Reconstruct a chain of agent invocations after the fact (parent_id forms a tree)
+- Alert on runaway subagents (e.g., one `agent.id` accounting for >50% of session spend)
+
+See the OpenTelemetry section in [Advanced Features → Telemetry](../09-advanced-features/README.md) for end-to-end exporter setup.
+
 ## Additional Resources
 
 - [Official Subagents Documentation](https://code.claude.com/docs/en/sub-agents)
@@ -1217,11 +1241,17 @@ graph TD
 
 ---
 
-**Last Updated**: May 6, 2026
-**Claude Code Version**: 2.1.131
+**Last Updated**: June 24, 2026
+**Claude Code Version**: 2.1.187
 **Sources**:
 - https://code.claude.com/docs/en/sub-agents
+- https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
 - https://code.claude.com/docs/en/agent-teams
+- https://code.claude.com/docs/en/changelog#2-1-172
+- https://code.claude.com/docs/en/changelog
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.117
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.131
-**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.138
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.139
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.140
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5

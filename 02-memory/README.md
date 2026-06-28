@@ -298,9 +298,9 @@ Claude Code settings (including `autoMemoryDirectory`, `claudeMdExcludes`, and o
 |-------|----------|-------|
 | 1 (Highest) | Managed policy (system-level) | Organization-wide enforcement |
 | 2 | `managed-settings.d/` (v2.1.83+) | Modular policy drop-ins, merged alphabetically |
-| 3 | `~/.claude/settings.json` | User preferences |
+| 3 | `.claude/settings.local.json` | Local overrides (git-ignored) |
 | 4 | `.claude/settings.json` | Project-level (committed to git) |
-| 5 (Lowest) | `.claude/settings.local.json` | Local overrides (git-ignored) |
+| 5 (Lowest) | `~/.claude/settings.json` | User preferences |
 
 **Platform-specific configuration (v2.1.51+):**
 
@@ -310,7 +310,7 @@ Settings can also be configured via:
 
 These platform-native mechanisms are read alongside JSON settings files and follow the same precedence rules.
 
-> **Note (v2.1.119)**: `/config` changes now persist to `~/.claude/settings.json`. Values written via `/config` participate in the normal project/local/policy precedence chain described above — they are no longer session-only. Use `/config` for interactive edits and edit `settings.json` files directly for scripted or managed configuration.
+> **Note (v2.1.119)**: `/config` changes now persist to `~/.claude/settings.json`. Values written via `/config` participate in the normal policy/local/project precedence chain described above — they are no longer session-only. Use `/config` for interactive edits and edit `settings.json` files directly for scripted or managed configuration.
 
 ### Retention and Cleanup Settings
 
@@ -331,6 +331,7 @@ These platform-native mechanisms are read alongside JSON settings files and foll
 |---------|------|-------------|
 | `attribution.commit` | boolean | Adds the `Co-Authored-By: Claude` trailer to commits Claude creates. Replaces the deprecated `includeCoAuthoredBy` flag. |
 | `attribution.pr` | boolean | Adds Claude attribution to pull request descriptions. Replaces the deprecated `includeCoAuthoredBy` flag for PRs. |
+| `attribution.sessionUrl` | boolean | Omit the claude.ai session link from commits and PRs created in web and Remote Control sessions (v2.1.183+). |
 | `voice.enabled` | boolean | Enables push-to-talk voice dictation (`/voice`). Replaces the deprecated `voiceEnabled` flag. |
 | `prUrlTemplate` | string | **New in v2.1.119.** Custom URL template for the footer PR badge; useful for GitLab, Bitbucket, or internal code-review platforms. Supports `{{owner}}`, `{{repo}}`, and `{{number}}` placeholders. |
 
@@ -1198,11 +1199,15 @@ For the most up-to-date information, refer to the official Claude Code documenta
 - [Official Memory Docs](https://code.claude.com/docs/en/memory) - Anthropic documentation
 
 ---
-**Last Updated**: May 6, 2026
-**Claude Code Version**: 2.1.131
+**Last Updated**: June 24, 2026
+**Claude Code Version**: 2.1.187
 **Sources**:
 - https://code.claude.com/docs/en/memory
 - https://code.claude.com/docs/en/settings
+- https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+- https://docs.anthropic.com/en/docs/claude-code/settings
+- https://code.claude.com/docs/en/cli-reference
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.117
-- https://github.com/anthropics/claude-code/releases/tag/v2.1.131
-**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.7, Claude Haiku 4.5
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.144
+- https://github.com/anthropics/claude-code/releases/tag/v2.1.145
+**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5

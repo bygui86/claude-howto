@@ -60,6 +60,8 @@ repos:
         args: [--config-file, scripts/pyproject.toml]
         files: ^scripts/
         exclude: ^scripts/tests/
+        additional_dependencies:
+          - types-Markdown
 
   # Local doc quality hooks (mirrors CI checks — CI is a 2nd pass of these)
   - repo: local
@@ -94,6 +96,13 @@ repos:
         pass_filenames: false
         types: [markdown]
         verbose: true
+
+      - id: markdown-rendering
+        name: markdown-rendering
+        language: system
+        entry: python scripts/check_markdown_rendering.py
+        pass_filenames: false
+        types: [markdown]
 
       - id: build-epub
         name: build-epub

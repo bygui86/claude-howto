@@ -3,8 +3,8 @@
 <!-- i18n-date: 2026-04-09 -->
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../resources/logos/claude-howto-logo-dark.svg">
-  <img alt="Claude How To" src="../resources/logos/claude-howto-logo.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="../../resources/logos/claude-howto-logo-dark.svg">
+  <img alt="Claude How To" src="../../resources/logos/claude-howto-logo.svg">
 </picture>
 
 # Посібник з навичок агента
@@ -179,7 +179,7 @@ paths: "src/api/**/*.ts"               # Glob-патерни, що обмежу�
 | `effort` | Перевизначення рівня зусиль: `low`, `medium`, `high` або `max`. |
 | `context` | `fork` для запуску навички у відгалуженому контексті субагента з власним контекстним вікном. |
 | `agent` | Тип субагента при `context: fork` (наприклад, `Explore`, `Plan`, `general-purpose`). |
-| `shell` | Оболонка для підстановок `!`command`` та скриптів: `bash` (за замовч.) або `powershell`. |
+| `shell` | Оболонка для підстановок `` !`command` `` та скриптів: `bash` (за замовч.) або `powershell`. |
 | `hooks` | Хуки, обмежені життєвим циклом цієї навички (той самий формат, що й глобальні хуки). |
 | `paths` | Glob-патерни, що обмежують автоактивацію. Рядок через кому або YAML-список. Формат як у правилах для конкретних шляхів. |
 

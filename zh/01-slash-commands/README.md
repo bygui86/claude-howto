@@ -1,6 +1,6 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../resources/logos/claude-howto-logo-dark.svg">
-  <img alt="Claude How To" src="../resources/logos/claude-howto-logo.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="../../resources/logos/claude-howto-logo-dark.svg">
+  <img alt="Claude How To" src="../../resources/logos/claude-howto-logo.svg">
 </picture>
 
 # Slash Commands 参考指南
@@ -28,7 +28,7 @@ Claude Code 目前提供 55+ 个内置命令和 5 个内置 Skills。你可以�
 | `/btw <question>` | 额外问题，不写入历史 |
 | `/chrome` | 配置 Chrome 浏览器集成 |
 | `/clear` | 清空对话（别名：`/reset`、`/new`） |
-| `/color [color|default]` | 设置提示栏颜色 |
+| `/color [color\|default]` | 设置提示栏颜色 |
 | `/compact [instructions]` | 压缩对话，可附带聚焦指令 |
 | `/config` | 打开设置（别名：`/settings`） |
 | `/context` | 用彩色网格可视化上下文占用 |
@@ -37,11 +37,11 @@ Claude Code 目前提供 55+ 个内置命令和 5 个内置 Skills。你可以�
 | `/desktop` | 继续在桌面应用中处理（别名：`/app`） |
 | `/diff` | 查看未提交更改的交互式 diff |
 | `/doctor` | 检查安装健康状态 |
-| `/effort [low|medium|high|max|auto]` | 设置推理强度；`max` 需要 Opus 4.6 |
+| `/effort [low\|medium\|high\|max\|auto]` | 设置推理强度；`max` 需要 Opus 4.6 |
 | `/exit` | 退出 REPL（别名：`/quit`） |
 | `/export [filename]` | 将当前对话导出为文件或剪贴板内容 |
 | `/extra-usage` | 配置额外用量以应对速率限制 |
-| `/fast [on|off]` | 切换快速模式 |
+| `/fast [on\|off]` | 切换快速模式 |
 | `/feedback` | 提交反馈（别名：`/bug`） |
 | `/help` | 显示帮助 |
 | `/hooks` | 查看 hook 配置 |
@@ -222,7 +222,7 @@ description: 按优先级审查 PR
 
 ### 用 Shell 命令注入动态上下文
 
-在 prompt 发送前，可用 `!` 命令先执行 shell 命令：
+在 prompt 发送前，可用 `` !`command` `` 先执行 shell 命令：
 
 ```yaml
 ---
