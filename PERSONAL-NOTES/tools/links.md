@@ -35,3 +35,10 @@ https://github.com/microsoft/markitdown
 ## IDE
 
 https://github.com/Pinperepette/sublodex
+
+## Multimedia
+
+### Image generation
+
+https://github.com/QwenLM/Qwen-Image
+	https://simonwillison.net/2025/Aug/19/qwen-image-edit/

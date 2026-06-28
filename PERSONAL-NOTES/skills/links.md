@@ -22,17 +22,22 @@ https://www.aihero.dev/5-agent-skills-i-use-every-day
 	https://github.com/mattpocock/skills/tree/main/skills/productivity/write-a-skill
 https://github.com/tw93/waza
 
+## kubernetes
+
+https://github.com/LukasNiessen/kubernetes-skill
+	https://lukasniessen.medium.com/claude-agent-skill-for-kubernetes-kubeshark-codex-claude-code-skill-a4c10d580f22
+
 ## golang
 
 https://github.com/samber/cc-skills-golang
 
-## frontend / ui
-
-https://github.com/anthropics/skills/tree/main/skills/frontend-design
-
 ## google
 
 https://github.com/google/skills
+
+## frontend / ui
+
+https://github.com/anthropics/skills/tree/main/skills/frontend-design
 
 ## writing
 
