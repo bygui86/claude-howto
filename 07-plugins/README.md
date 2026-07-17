@@ -579,6 +579,9 @@ Plugin marketplaces are defined in `.claude-plugin/marketplace.json`:
 | `plugins[].description` | No | Brief plugin description |
 | `plugins[].version` | No | Semantic version string |
 | `plugins[].author` | No | Plugin author name |
+| `plugins[].renames` | No | Maps a former plugin `name` to its current name (or `null` if removed) so users migrate automatically (v2.1.193) |
+| `plugins[].displayName` | No | Human-readable name shown in the UI; not used for lookup (v2.1.143) |
+| `plugins[].defaultEnabled` | No | If `false`, the plugin installs disabled until the user opts in (v2.1.154) |
 
 ### Plugin source types
 
@@ -594,6 +597,8 @@ Plugins can be sourced from multiple locations:
 | **pip** | `{ "source": "pip", "package": "..." }` | `{ "source": "pip", "package": "claude-data-plugin", "version": ">=1.0" }` |
 
 GitHub and git sources support optional `ref` (branch/tag) and `sha` (commit hash) fields for version pinning.
+
+Reserved marketplace names now include `first-party-plugins` and `healthcare` (v2.1.205) — these are held for official use and cannot be claimed by a custom marketplace.
 
 ### Distribution methods
 
@@ -736,6 +741,8 @@ claude plugin install plugin-name@marketplace-name
 /plugin enable plugin-name
 /plugin disable plugin-name
 ```
+
+The `/plugin` interface surfaces unused plugins so you can clean them up (v2.1.187+). Enable/disable also works when a plugin's `plugin.json` `name` differs from its marketplace entry name (v2.1.195+).
 
 ### Listing installed plugins (v2.1.163)
 Confirm which plugins are active in the current session:
@@ -1118,8 +1125,8 @@ The following Claude Code features work together with plugins:
 
 ---
 
-**Last Updated**: June 17, 2026
-**Claude Code Version**: 2.1.179
+**Last Updated**: July 11, 2026
+**Claude Code Version**: 2.1.206
 **Sources**:
 - https://code.claude.com/docs/en/plugins
 - https://code.claude.com/docs/en/changelog#2-1-172
@@ -1135,4 +1142,4 @@ The following Claude Code features work together with plugins:
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.142
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.143
 - https://code.claude.com/docs/en/cli-reference
-**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5
+**Compatible Models**: Claude Sonnet 5, Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5

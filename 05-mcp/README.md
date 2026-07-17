@@ -128,6 +128,10 @@ Server-Sent Events transport is deprecated in favor of `http` but still supporte
 claude mcp add --transport sse legacy-server https://example.com/sse
 ```
 
+### Session Working Directories (roots/list)
+
+MCP servers can discover the session's working directories: the launch directory plus all `--add-dir`/`additionalDirectories` entries are returned via the MCP `roots/list` request, and a `notifications/roots/list_changed` notification is sent whenever the set changes (v2.1.203). The idle timeout now also applies to stdio servers (30 minutes), with a per-server `timeout` acting as an idle floor (v2.1.203).
+
 ### Windows-Specific Note
 
 On native Windows (not WSL), use `cmd /c` for npx commands:
@@ -180,6 +184,11 @@ If your MCP server returns errors on the standard OAuth metadata endpoint (`/.we
 ```
 
 The URL must use `https://`. This option requires Claude Code v2.1.64 or later.
+
+#### Authentication Startup Notice and Dynamic-Header Refresh (v2.1.193)
+
+- **Startup auth notice (v2.1.193+)**: At startup, Claude Code surfaces a notice listing any MCP servers that still need authentication, so a server that needs a login isn't left silently non-working.
+- **`headersHelper` auto-refresh (v2.1.193+)**: If you supply custom auth via a `headersHelper`, the helper is re-invoked automatically when a server returns HTTP 401 or 403. Credentials refresh on the fly without a manual reconnect. See [Use dynamic headers for custom authentication](https://code.claude.com/docs/en/mcp).
 
 ### Claude.ai MCP Connectors
 
@@ -336,7 +345,7 @@ Store project-specific MCP configurations in `.mcp.json`:
 }
 ```
 
-Team members will see an approval prompt on first use of project MCPs.
+Team members will see an approval prompt on first use of project MCPs. In an untrusted workspace, servers that a repo self-approved via a committed `.claude/settings.json` are **not** auto-spawned by `claude mcp list`/`get` — they show `⏸ Pending approval` until you accept the trust dialog, and `enableAllProjectMcpServers` is ignored in an untrusted folder (v2.1.196).
 
 ## MCP Configuration Management
 
@@ -1178,8 +1187,8 @@ export GITHUB_TOKEN="your_token"
 
 ---
 
-**Last Updated**: June 24, 2026
-**Claude Code Version**: 2.1.187
+**Last Updated**: July 11, 2026
+**Claude Code Version**: 2.1.206
 **Sources**:
 - https://code.claude.com/docs/en/mcp
 - https://code.claude.com/docs/en/changelog
@@ -1187,4 +1196,4 @@ export GITHUB_TOKEN="your_token"
 - https://github.com/anthropics/claude-code/releases/tag/v2.1.139
 - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
 - https://docs.anthropic.com/en/docs/claude-code/mcp
-**Compatible Models**: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5
+**Compatible Models**: Claude Sonnet 5, Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5
